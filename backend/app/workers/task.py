@@ -4,6 +4,9 @@ from app.models.job import Job
 import redis
 import json
 import time
+import os
+
+REDIS_URL = os.environ.get("REDIS_URL", "redis://localhost:6379/0")
 
 def publish_progress(r, job_id, event, message):
     payload = json.dumps({
@@ -15,7 +18,7 @@ def publish_progress(r, job_id, event, message):
 
 @celery_app.task(bind=True)
 def process_document(self, job_id: int):
-    r = redis.Redis(host="localhost", port=6379, decode_responses=True)
+    r = redis.from_url(REDIS_URL, decode_responses=True)
     db = SessionLocal()
 
     try:
@@ -23,17 +26,14 @@ def process_document(self, job_id: int):
         if not job:
             return {"error": "Job not found"}
 
-        # Step 1: job_started
         job.status = "processing"
         db.commit()
         publish_progress(r, job_id, "job_started", "Job has started")
 
-        # Step 2: parsing
         publish_progress(r, job_id, "document_parsing_started", "Parsing document...")
         time.sleep(2)
         publish_progress(r, job_id, "document_parsing_completed", "Parsing complete")
 
-        # Step 3: extraction
         publish_progress(r, job_id, "field_extraction_started", "Extracting fields...")
         time.sleep(2)
 
@@ -46,7 +46,6 @@ def process_document(self, job_id: int):
 
         publish_progress(r, job_id, "field_extraction_completed", "Extraction complete")
 
-        # Step 4: complete
         job.status = "completed"
         job.result = result
         db.commit()
@@ -63,3 +62,16 @@ def process_document(self, job_id: int):
         db.close()
 
     return result
+```
+
+---
+
+**Deploy steps:**
+```
+1. Push all these changes to GitHub
+2. Railway auto-redeploys from GitHub
+3. In Railway dashboard → your service → Variables:
+   - Add DATABASE_URL (from Postgres service)
+   - Add REDIS_URL (from Redis service)
+4. Trigger a manual redeploy
+5. Check deploy logs for any errors
