@@ -33,11 +33,3 @@ app.include_router(progress_router)
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
     uvicorn.run("app.main:app", host="0.0.0.0", port=port)
-```
-
----
-
-**4. Create `backend/Procfile`** — tells Railway how to start:
-```
-web: uvicorn app.main:app --host 0.0.0.0 --port $PORT
-worker: celery -A app.workers.task worker --loglevel=info --concurrency=1
