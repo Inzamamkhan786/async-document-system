@@ -1,6 +1,6 @@
 import { authService } from "./auth";
 
-const BASE_URL = "http://127.0.0.1:8000";
+const BASE_URL = "https://ravishing-healing-production-edeb.up.railway.app";
 
 const authHeaders = () => ({
   "Authorization": `Bearer ${authService.getToken() ?? ""}`,
