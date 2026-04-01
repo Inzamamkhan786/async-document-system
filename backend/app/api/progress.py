@@ -2,12 +2,15 @@ from fastapi import APIRouter
 from sse_starlette.sse import EventSourceResponse
 import redis
 import asyncio
+import os
 
 router = APIRouter()
 
+REDIS_URL = os.environ.get("REDIS_URL", "redis://localhost:6379/0")
+
 @router.get("/progress")
 async def progress():
-    r = redis.Redis(host="localhost", port=6379, decode_responses=True)
+    r = redis.from_url(REDIS_URL, decode_responses=True)
 
     async def event_stream():
         pubsub = r.pubsub()
