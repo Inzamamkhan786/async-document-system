@@ -7,29 +7,6 @@ healthcheckPath = "/"
 healthcheckTimeout = 30
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 3
-```
 
----
-
-**6. Update `backend/requirements.txt`** — make sure these are all there:
-```
-fastapi==0.111.0
-uvicorn[standard]==0.29.0
-sqlalchemy==2.0.30
-psycopg2-binary==2.9.9
-celery==5.3.6
-redis==5.0.4
-sse-starlette==1.8.2
-passlib[bcrypt]==1.7.4
-python-jose[cryptography]==3.3.0
-python-multipart==0.0.9
-```
-
----
-
-**7. Railway environment variables — set these in Railway dashboard:**
-
-Go to your Railway service → **Variables** tab → add:
-```
-DATABASE_URL    = (Railway auto-fills this when you add Postgres — copy from Postgres service)
-REDIS_URL       = (copy from your Redis service in Railway)
+[env]
+PYTHONUNBUFFERED = "1"
