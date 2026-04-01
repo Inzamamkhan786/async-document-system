@@ -1,4 +1,4 @@
-const BASE_URL = "https://ravishing-healing-production-edeb.up.railway.app";
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 export interface AuthUser {
   user_id: number;
