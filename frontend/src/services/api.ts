@@ -1,6 +1,6 @@
 import { authService } from "./auth";
 
-const BASE_URL = "https://ravishing-healing-production-edeb.up.railway.app";
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 const authHeaders = () => ({
   "Authorization": `Bearer ${authService.getToken() ?? ""}`,
