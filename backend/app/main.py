@@ -9,33 +9,33 @@ from app.models import user, job
 import os
 import uvicorn
 
+# Create DB tables
 Base.metadata.create_all(bind=engine)
 
+# Create FastAPI app
 app = FastAPI()
 
-origins = [
-    "http://localhost:5173",
-    "https://async-document-system.vercel.app",
-    "https://async-document-system-f46aw38g9-inzamams-projects-0fda4477.vercel.app"
-]
-
+# ✅ CORS Fix (Important)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# Root route
 @app.get("/")
 def home():
     return {"message": "Async Document Processing API Running"}
 
+# Routers
 app.include_router(auth_router)
 app.include_router(upload_router)
 app.include_router(jobs_router)
 app.include_router(progress_router)
 
+# Run server
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
     uvicorn.run("app.main:app", host="0.0.0.0", port=port)
