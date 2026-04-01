@@ -9,15 +9,15 @@ from app.models import user, job
 import os
 import uvicorn
 
-# Create DB tables
+# Create FastAPI app
+app = FastAPI()
+
+# Create DB tables on startup
 @app.on_event("startup")
 def on_startup():
     Base.metadata.create_all(bind=engine)
 
-# Create FastAPI app
-app = FastAPI()
-
-# ✅ CORS Fix (Important)
+# CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
