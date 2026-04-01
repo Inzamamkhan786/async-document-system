@@ -8,10 +8,16 @@ from app.core.database import Base, engine
 from app.models import user, job
 import os
 import uvicorn
+from fastapi.middleware.cors import CORSMiddleware
 
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:5173",
+    "https://async-document-system.vercel.app"
+]
 
 app.add_middleware(
     CORSMiddleware,
