@@ -5,7 +5,10 @@ from app.api.jobs import router as jobs_router
 from app.api.progress import router as progress_router
 from app.api.auth import router as auth_router
 from app.core.database import Base, engine
-from app.models import user, job  # import both so Base knows about them
+from app.models import user, job
+
+import os
+import uvicorn
 
 Base.metadata.create_all(bind=engine)
 
