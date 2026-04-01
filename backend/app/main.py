@@ -15,7 +15,8 @@ app = FastAPI()
 
 origins = [
     "http://localhost:5173",
-    "https://async-document-system.vercel.app"
+    "https://async-document-system.vercel.app",
+    "https://async-document-system-f46aw38g9-inzamams-projects-0fda4477.vercel.app"
 ]
 
 app.add_middleware(
