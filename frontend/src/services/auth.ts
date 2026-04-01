@@ -1,4 +1,4 @@
-const BASE_URL = "http://127.0.0.1:8000";
+const BASE_URL = "https://ravishing-healing-production-edeb.up.railway.app";
 
 export interface AuthUser {
   user_id: number;
