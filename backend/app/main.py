@@ -10,7 +10,9 @@ import os
 import uvicorn
 
 # Create DB tables
-Base.metadata.create_all(bind=engine)
+@app.on_event("startup")
+def on_startup():
+    Base.metadata.create_all(bind=engine)
 
 # Create FastAPI app
 app = FastAPI()
