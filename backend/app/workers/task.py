@@ -8,6 +8,7 @@ import os
 
 REDIS_URL = os.environ.get("REDIS_URL", "redis://localhost:6379/0")
 
+
 def publish_progress(r, job_id, event, message):
     payload = json.dumps({
         "job_id": job_id,
@@ -15,6 +16,7 @@ def publish_progress(r, job_id, event, message):
         "message": message
     })
     r.publish("progress", payload)
+
 
 @celery_app.task(bind=True)
 def process_document(self, job_id: int):
@@ -58,20 +60,8 @@ def process_document(self, job_id: int):
         db.commit()
         publish_progress(r, job_id, "job_failed", f"Error: {str(e)}")
         raise
+
     finally:
         db.close()
 
     return result
-```
-
----
-
-**Deploy steps:**
-```
-1. Push all these changes to GitHub
-2. Railway auto-redeploys from GitHub
-3. In Railway dashboard → your service → Variables:
-   - Add DATABASE_URL (from Postgres service)
-   - Add REDIS_URL (from Redis service)
-4. Trigger a manual redeploy
-5. Check deploy logs for any errors
